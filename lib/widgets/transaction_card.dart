@@ -5,49 +5,38 @@ import 'package:expenses_app/models/transaction.dart';
 
 class TransactionCard extends StatelessWidget {
   final Transaction transaction;
+  final Function deleteTransactionHandler;
 
-  TransactionCard(this.transaction);
+  TransactionCard(this.transaction, this.deleteTransactionHandler);
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Row(
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 15,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).primaryColor,
-                width: 2,
-              ),
-            ),
-            padding: EdgeInsets.all(10),
-            child: Text(
-              '\$' + transaction.amount.toStringAsFixed(2),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Theme.of(context).primaryColor,
-              ),
+      elevation: 2,
+      child: ListTile(
+        leading: CircleAvatar(
+          radius: 30,
+          child: Padding(
+            padding: const EdgeInsets.all(6),
+            child: FittedBox(
+              child: Text('\$' + transaction.amount.toStringAsFixed(2)),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                transaction.title,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Text(
-                DateFormat().format(transaction.dateTime),
-                style: Theme.of(context).textTheme.subtitle1,
-              )
-            ],
-          )
-        ],
+        ),
+        title: Text(
+          transaction.title,
+          style: Theme.of(context).textTheme.headline6,
+        ),
+        subtitle: Text(
+          DateFormat.yMMMd().format(transaction.dateTime),
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          color: Theme.of(context).errorColor,
+          onPressed: () {
+            deleteTransactionHandler(transaction.uuid);
+          },
+        ),
       ),
     );
   }

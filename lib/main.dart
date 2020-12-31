@@ -80,6 +80,13 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _deleteTransaction(String transactionUuid) {
+    setState(() {
+      _userTransactions
+          .removeWhere((transaction) => transaction.uuid == transactionUuid);
+    });
+  }
+
   void _showTransactionForm(BuildContext buildContext) {
     showModalBottomSheet(
       context: buildContext,
@@ -103,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_userTransactions)
+            TransactionList(_userTransactions, _deleteTransaction)
           ],
         ),
       ),

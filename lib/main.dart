@@ -1,10 +1,10 @@
-import 'package:expenses_app/widgets/chart.dart';
-import 'package:expenses_app/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:expenses_app/models/transaction.dart';
+import 'package:expenses_app/widgets/chart.dart';
 import 'package:expenses_app/widgets/transaction_form.dart';
+import 'package:expenses_app/widgets/transaction_list.dart';
 
 void main() {
   runApp(MyApp());

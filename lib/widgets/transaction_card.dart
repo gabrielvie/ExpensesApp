@@ -33,9 +33,7 @@ class TransactionCard extends StatelessWidget {
         trailing: IconButton(
           icon: Icon(Icons.delete),
           color: Theme.of(context).errorColor,
-          onPressed: () {
-            deleteTransactionHandler(transaction.uuid);
-          },
+          onPressed: () => deleteTransactionHandler(transaction.uuid),
         ),
       ),
     );

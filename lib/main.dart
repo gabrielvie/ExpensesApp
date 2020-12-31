@@ -1,3 +1,4 @@
+import 'package:expenses_app/widgets/chart.dart';
 import 'package:expenses_app/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
@@ -49,28 +50,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transaction> _userTransactions = [
-    Transaction(
-      uuid: '5027aec8-33bc-48bf-809d-7f6117fcf682',
-      title: 'New Shoes',
-      amount: 69.99,
-      dateTime: DateTime.now(),
-    ),
-    Transaction(
-      uuid: 'f93d587f-d1f9-4591-a727-988f0dc9f05c',
-      title: 'Weekly Groceries',
-      amount: 16.53,
-      dateTime: DateTime.now(),
-    ),
-  ];
+  final List<Transaction> _userTransactions = [];
 
-  void _addNewTransaction(String transactionTitle, double transactionAmound) {
+  List<Transaction> get _recentTransactions {
+    return _userTransactions
+        .where(
+          (transaction) => transaction.dateTime.isAfter(
+            DateTime.now().subtract(Duration(days: 7)),
+          ),
+        )
+        .toList();
+  }
+
+  void _addNewTransaction(
+    String transactionTitle,
+    double transactionAmound,
+    DateTime transactionDateTime,
+  ) {
     var uuid = Uuid();
     final newTransaction = Transaction(
       uuid: uuid.v4(),
       title: transactionTitle,
       amount: transactionAmound,
-      dateTime: DateTime.now(),
+      dateTime: transactionDateTime,
     );
 
     setState(() {
@@ -100,14 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              width: double.infinity,
-              child: Card(
-                color: Colors.blueGrey,
-                child: Text('CHART!'),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_userTransactions)
           ],
         ),

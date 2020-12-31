@@ -20,7 +20,6 @@ class _TransactionFormState extends State<TransactionForm> {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        elevation: 5,
         child: Container(
           padding: EdgeInsets.all(10),
           child: Column(

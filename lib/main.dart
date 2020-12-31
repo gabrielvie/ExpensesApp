@@ -17,7 +17,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: this.title,
       theme: ThemeData(
-        primarySwatch: Colors.amber,
+        accentColor: Colors.amber,
+        primarySwatch: Colors.green,
+        fontFamily: 'MesloLGS NF',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                height: 1.5,
+              ),
+              subtitle1: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+                height: 1.5,
+              ),
+            ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: this.title),
@@ -88,7 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
               width: double.infinity,
-              height: 100,
               child: Card(
                 color: Colors.blueGrey,
                 child: Text('CHART!'),

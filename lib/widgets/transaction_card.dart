@@ -26,7 +26,7 @@ class TransactionCard extends StatelessWidget {
             ),
             padding: EdgeInsets.all(10),
             child: Text(
-              '\$' + transaction.amount.toString(),
+              '\$' + transaction.amount.toStringAsFixed(2),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,

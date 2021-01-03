@@ -102,15 +102,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final AppBar appBar = AppBar(title: Text(widget.title));
+    final double deviceHeight = MediaQuery.of(context).size.height;
+    final double devicePaddingTop = MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions, _deleteTransaction)
+            Container(
+              child: Chart(_recentTransactions),
+              height: (deviceHeight -
+                      appBar.preferredSize.height -
+                      devicePaddingTop) *
+                  0.3,
+            ),
+            Container(
+              child: TransactionList(_userTransactions, _deleteTransaction),
+              height: (deviceHeight -
+                      appBar.preferredSize.height -
+                      devicePaddingTop) *
+                  0.7,
+            )
           ],
         ),
       ),

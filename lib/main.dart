@@ -50,6 +50,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  bool _showChart = false;
+
   final List<Transaction> _userTransactions = [];
 
   List<Transaction> get _recentTransactions {
@@ -111,20 +113,35 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Container(
-              child: Chart(_recentTransactions),
-              height: (deviceHeight -
-                      appBar.preferredSize.height -
-                      devicePaddingTop) *
-                  0.3,
+            Row(
+              children: <Widget>[
+                Text('Show Chart!'),
+                Switch(
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    })
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
             ),
-            Container(
-              child: TransactionList(_userTransactions, _deleteTransaction),
-              height: (deviceHeight -
-                      appBar.preferredSize.height -
-                      devicePaddingTop) *
-                  0.7,
-            )
+            _showChart
+                ? Container(
+                    child: Chart(_recentTransactions),
+                    height: (deviceHeight -
+                            appBar.preferredSize.height -
+                            devicePaddingTop) *
+                        (_showChart ? 0.7 : 0.3),
+                  )
+                : Container(
+                    child:
+                        TransactionList(_userTransactions, _deleteTransaction),
+                    height: (deviceHeight -
+                            appBar.preferredSize.height -
+                            devicePaddingTop) *
+                        0.7,
+                  )
           ],
         ),
       ),

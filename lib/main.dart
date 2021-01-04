@@ -50,7 +50,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _showChart = false;
+  bool _showChart = true;
 
   final List<Transaction> _userTransactions = [];
 
@@ -104,44 +104,46 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscapeOrientation =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     final AppBar appBar = AppBar(title: Text(widget.title));
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double devicePaddingTop = MediaQuery.of(context).padding.top;
+
+    final transactionsChartWidget = Container(
+      child: Chart(_recentTransactions),
+      height: (deviceHeight - appBar.preferredSize.height - devicePaddingTop) *
+          (isLandscapeOrientation ? 0.7 : 0.3),
+    );
+    final transactionListWdiget = Container(
+      child: TransactionList(_userTransactions, _deleteTransaction),
+      height:
+          (deviceHeight - appBar.preferredSize.height - devicePaddingTop) * 0.7,
+    );
 
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text('Show Chart!'),
-                Switch(
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    })
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            _showChart
-                ? Container(
-                    child: Chart(_recentTransactions),
-                    height: (deviceHeight -
-                            appBar.preferredSize.height -
-                            devicePaddingTop) *
-                        (_showChart ? 0.7 : 0.3),
-                  )
-                : Container(
-                    child:
-                        TransactionList(_userTransactions, _deleteTransaction),
-                    height: (deviceHeight -
-                            appBar.preferredSize.height -
-                            devicePaddingTop) *
-                        0.7,
-                  )
+            if (isLandscapeOrientation)
+              Row(
+                children: <Widget>[
+                  Text('Show Chart!'),
+                  Switch(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      })
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            if (!isLandscapeOrientation) transactionsChartWidget,
+            if (!isLandscapeOrientation) transactionListWdiget,
+            if (isLandscapeOrientation)
+              _showChart ? transactionsChartWidget : transactionListWdiget
           ],
         ),
       ),

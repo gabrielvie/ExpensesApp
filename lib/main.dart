@@ -104,11 +104,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     final isLandscapeOrientation =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+        mediaQuery.orientation == Orientation.landscape;
     final AppBar appBar = AppBar(title: Text(widget.title));
-    final double deviceHeight = MediaQuery.of(context).size.height;
-    final double devicePaddingTop = MediaQuery.of(context).padding.top;
+    final double deviceHeight = mediaQuery.size.height;
+    final double devicePaddingTop = mediaQuery.padding.top;
 
     final transactionsChartWidget = Container(
       child: Chart(_recentTransactions),

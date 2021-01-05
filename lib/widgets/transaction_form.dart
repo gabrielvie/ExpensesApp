@@ -1,9 +1,9 @@
-import 'dart:io';
-
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import 'package:expenses_app/widgets/adaptative_flat_button.dart';
 
 class TransactionForm extends StatefulWidget {
   final Function addTransactionHandler;
@@ -57,18 +57,7 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               Container(
                 margin: EdgeInsets.only(top: 30),
-                child: Platform.isIOS
-                    ? CupertinoButton(
-                        child: Text('Add Transaction'),
-                        onPressed: _submitData,
-                        color: Theme.of(context).primaryColor,
-                      )
-                    : FlatButton(
-                        child: Text('Add Transaction'),
-                        color: Theme.of(context).primaryColor,
-                        textColor: Colors.white,
-                        onPressed: _submitData,
-                      ),
+                child: AdaptativeFlatButton('Add Transaction', _submitData),
               ),
             ],
           ),

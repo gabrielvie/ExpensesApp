@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -107,7 +110,20 @@ class _MyHomePageState extends State<MyHomePage> {
     final mediaQuery = MediaQuery.of(context);
     final isLandscapeOrientation =
         mediaQuery.orientation == Orientation.landscape;
-    final AppBar appBar = AppBar(title: Text(widget.title));
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text(widget.title),
+            trailing: Row(
+              children: <Widget>[
+                GestureDetector(
+                  child: Icon(CupertinoIcons.add),
+                  onTap: () => _showTransactionForm(context),
+                )
+              ],
+              mainAxisSize: MainAxisSize.min,
+            ),
+          )
+        : AppBar(title: Text(widget.title));
     final double deviceHeight = mediaQuery.size.height;
     final double devicePaddingTop = mediaQuery.padding.top;
 
@@ -122,36 +138,46 @@ class _MyHomePageState extends State<MyHomePage> {
           (deviceHeight - appBar.preferredSize.height - devicePaddingTop) * 0.7,
     );
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            if (isLandscapeOrientation)
-              Row(
-                children: <Widget>[
-                  Text('Show Chart!'),
-                  Switch(
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      })
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
-              ),
-            if (!isLandscapeOrientation) transactionsChartWidget,
-            if (!isLandscapeOrientation) transactionListWdiget,
-            if (isLandscapeOrientation)
-              _showChart ? transactionsChartWidget : transactionListWdiget
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _showTransactionForm(context),
+    final pageBodyWidget = SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          if (isLandscapeOrientation)
+            Row(
+              children: <Widget>[
+                Text('Show Chart!'),
+                Switch.adaptive(
+                    activeColor: Theme.of(context).accentColor,
+                    value: _showChart,
+                    onChanged: (val) {
+                      setState(() {
+                        _showChart = val;
+                      });
+                    })
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
+            ),
+          if (!isLandscapeOrientation) transactionsChartWidget,
+          if (!isLandscapeOrientation) transactionListWdiget,
+          if (isLandscapeOrientation)
+            _showChart ? transactionsChartWidget : transactionListWdiget
+        ],
       ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            child: pageBodyWidget,
+            navigationBar: appBar,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: pageBodyWidget,
+            floatingActionButton: Platform.isIOS
+                ? Container()
+                : FloatingActionButton(
+                    child: Icon(Icons.add),
+                    onPressed: () => _showTransactionForm(context),
+                  ),
+          );
   }
 }

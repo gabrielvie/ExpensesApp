@@ -138,29 +138,31 @@ class _MyHomePageState extends State<MyHomePage> {
           (deviceHeight - appBar.preferredSize.height - devicePaddingTop) * 0.7,
     );
 
-    final pageBodyWidget = SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          if (isLandscapeOrientation)
-            Row(
-              children: <Widget>[
-                Text('Show Chart!'),
-                Switch.adaptive(
-                    activeColor: Theme.of(context).accentColor,
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    })
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-          if (!isLandscapeOrientation) transactionsChartWidget,
-          if (!isLandscapeOrientation) transactionListWdiget,
-          if (isLandscapeOrientation)
-            _showChart ? transactionsChartWidget : transactionListWdiget
-        ],
+    final pageBodyWidget = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            if (isLandscapeOrientation)
+              Row(
+                children: <Widget>[
+                  Text('Show Chart!'),
+                  Switch.adaptive(
+                      activeColor: Theme.of(context).accentColor,
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      })
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              ),
+            if (!isLandscapeOrientation) transactionsChartWidget,
+            if (!isLandscapeOrientation) transactionListWdiget,
+            if (isLandscapeOrientation)
+              _showChart ? transactionsChartWidget : transactionListWdiget
+          ],
+        ),
       ),
     );
 

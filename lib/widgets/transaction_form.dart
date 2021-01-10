@@ -56,7 +56,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 },
               ),
               Container(
-                margin: EdgeInsets.only(top: 30),
+                margin: const EdgeInsets.only(top: 30),
                 child: AdaptativeFlatButton('Add Transaction', _submitData),
               ),
             ],

@@ -105,6 +105,60 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _buildChartContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    double height,
+  ) {
+    return Container(
+      child: Chart(_recentTransactions),
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          height,
+    );
+  }
+
+  List<Widget> _buildLandscapeContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget transactionListWdiget,
+  ) {
+    return <Widget>[
+      Row(
+        children: <Widget>[
+          Text(
+            'Show Chart!',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          Switch.adaptive(
+              activeColor: Theme.of(context).accentColor,
+              value: _showChart,
+              onChanged: (val) {
+                setState(() {
+                  _showChart = val;
+                });
+              })
+        ],
+        mainAxisAlignment: MainAxisAlignment.center,
+      ),
+      _showChart
+          ? _buildChartContent(mediaQuery, appBar, 0.7)
+          : transactionListWdiget
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+    MediaQueryData mediaQuery,
+    AppBar appBar,
+    Widget transactionListWdiget,
+  ) {
+    return <Widget>[
+      _buildChartContent(mediaQuery, appBar, 0.3),
+      transactionListWdiget,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -124,46 +178,32 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           )
         : AppBar(title: Text(widget.title));
-    final double deviceHeight = mediaQuery.size.height;
-    final double devicePaddingTop = mediaQuery.padding.top;
 
-    final transactionsChartWidget = Container(
-      child: Chart(_recentTransactions),
-      height: (deviceHeight - appBar.preferredSize.height - devicePaddingTop) *
-          (isLandscapeOrientation ? 0.7 : 0.3),
-    );
     final transactionListWdiget = Container(
       child: TransactionList(_userTransactions, _deleteTransaction),
-      height:
-          (deviceHeight - appBar.preferredSize.height - devicePaddingTop) * 0.7,
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
     );
 
     final pageBodyWidget = SafeArea(
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            if (isLandscapeOrientation)
-              Row(
-                children: <Widget>[
-                  Text(
-                    'Show Chart!',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  Switch.adaptive(
-                      activeColor: Theme.of(context).accentColor,
-                      value: _showChart,
-                      onChanged: (val) {
-                        setState(() {
-                          _showChart = val;
-                        });
-                      })
-                ],
-                mainAxisAlignment: MainAxisAlignment.center,
+            if (isLandscapeOrientation == true)
+              ..._buildLandscapeContent(
+                mediaQuery,
+                appBar,
+                transactionListWdiget,
               ),
-            if (!isLandscapeOrientation) transactionsChartWidget,
-            if (!isLandscapeOrientation) transactionListWdiget,
-            if (isLandscapeOrientation)
-              _showChart ? transactionsChartWidget : transactionListWdiget
+            if (isLandscapeOrientation == false)
+              ..._buildPortraitContent(
+                mediaQuery,
+                appBar,
+                transactionListWdiget,
+              ),
+            // _showChart ? transactionsChartWidget : transactionListWdiget
           ],
         ),
       ),
